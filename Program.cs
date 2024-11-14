@@ -259,6 +259,7 @@ namespace _1003_órai_console_léptetés
                 {
                     Date = currentDate,
                     Attributes = charAttributes
+                    //TODO change saving the drawing chatacter data
                 };
                 context.Drawings.Add(drawing);
                 context.SaveChanges();

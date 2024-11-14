@@ -10,8 +10,11 @@ namespace _1003_órai_console_léptetés
     public class Drawing
     {
         public int Id { get; set; }
-        public string Date { get; set; }
-        public string Attributes { get; set; }
+        public DateTime Date { get; set; }
+        public int CharPosX { get; set; }
+        public int CharPosY { get; set; }
+        public int GetCharNum { get; set; }
+        public int GetColorNum { get; set; }
     }
 
     public class DrawingContext : DbContext

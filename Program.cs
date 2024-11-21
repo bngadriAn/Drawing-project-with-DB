@@ -7,6 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _1003_órai_console_léptetés
 {
+    public class DrawingContext : DbContext
+    {
+        public DbSet<Drawing> Drawings { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+         => options.UseSqlite("Data Source=Drawings.db");
+    }
     public class Drawing
     {
         public int Id { get; set; }
@@ -17,25 +24,14 @@ namespace _1003_órai_console_léptetés
         public int GetColorNum { get; set; }
     }
 
-    public class DrawingContext : DbContext
-    {
-        public DbSet<Drawing> Drawings { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-        }
-    }
-
     internal class Program
     {
         static int x = 3, y = 8, cursorPosX = 0, cursorPosY = 0, charNum = 1, colorNum = 1;
-        static int charPosX = 0, charPosY = 0, getCharNum = 0, getColorNum = 0, spacepress = 0;
+        static int Id = 0, charPosX = 0, charPosY = 0, getCharNum = 0, getColorNum = 0, spacepress = 0;
         static string charAttributes = "";
 
         static void Main(string[] args)
         {
-            //ensure db was created???
             Console.CursorVisible = false;
             int activeButton = 1;
             ConsoleKeyInfo input;
@@ -239,7 +235,7 @@ namespace _1003_órai_console_léptetés
                 {
                     foreach (var drawing in drawings)
                     {
-                        Console.WriteLine($"ID: {drawing.Id}, Date: {drawing.Date}, Attributes: {drawing.Attributes}");
+                        Console.WriteLine($"ID: {drawing.Id}, Date: {drawing.Date}, X: {drawing.CharPosX}, Y: {drawing.CharPosY}, Character: {drawing.GetCharNum}, Color: {drawing.GetColorNum}");
                     }
                 }
                 else
@@ -251,15 +247,17 @@ namespace _1003_órai_console_léptetés
 
         static void SaveDrawing()
         {
-            string currentDate = DateTime.Now.ToString("MM_dd_yyyy");
-
+            int posx = 0, posy = 0, charnum = 0, colornum = 0;
             using (var context = new DrawingContext())
             {
                 var drawing = new Drawing
                 {
-                    Date = currentDate,
-                    Attributes = charAttributes
-                    //TODO change saving the drawing chatacter data
+                    Date = DateTime.Now,
+                    CharPosX = posx,
+                    CharPosY = posy,
+                    GetCharNum = charnum,
+                    GetColorNum = colornum
+
                 };
                 context.Drawings.Add(drawing);
                 context.SaveChanges();
